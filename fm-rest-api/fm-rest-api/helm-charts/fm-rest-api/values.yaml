@@ -69,7 +69,6 @@ conf:
   fm:
     DEFAULT:
       log_config_append: /etc/fm/logging.conf
-      trap_destinations:
       region_name: RegionOne
       event_log_max_size: 4000
     database:
