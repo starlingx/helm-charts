@@ -1,17 +1,21 @@
 kubernetes-sigs/node-feature-discovery
 ======================================
 
-This chart runs v0.3.0 of the node-feature-discovery as implemented
-at https://github.com/kubernetes-sigs/node-feature-discovery
+This chart is taken from the "deployment" directory of version
+v0.8.1 of the node-feature-discovery package as implemented at
+https://github.com/kubernetes-sigs/node-feature-discovery
+
+I made one change from the upstream code, I set the chart version to
+0.8.1 to match the git tag and chart appVersion.  This ensures that the
+chart tarball is versioned appropriately.
 
 This software enables node feature discovery for Kubernetes. It detects
 hardware features available on each node in a Kubernetes cluster, and
 advertises those features using node labels.
 
-This chart uses a DaemonSet to spawn a pod on each node in the cluster
-to do the actual work.
+A DaemonSet spawns a pod on each node in the cluster to scan the host,
+and feeds its information to a single "manager" pod running on a
+controller node.
 
-The two files under the templates directory are taken directly from
-v0.3.0 at the link above.  The Docker image specified is the one
-published by the upstream team.
+The Docker image specified is the one published by the upstream team.
 
