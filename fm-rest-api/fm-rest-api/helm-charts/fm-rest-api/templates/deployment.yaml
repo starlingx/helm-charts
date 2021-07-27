@@ -55,6 +55,8 @@ spec:
             - name: fm-etc-event
               mountPath: /etc/fm/events.yaml
               readOnly: true
+              #faultmanagement
+{{- dict "enabled" .Values.manifests.certificates "name" .Values.secrets.tls.faultmanagement.fm_api.public | include "helm-toolkit.snippets.tls_volume_mount" | indent 12 }}
           command:
             - /tmp/fm-rest-api.sh
           image: "{{ .Values.images.tags.fm_rest_api }}"
@@ -74,16 +76,17 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
-       - name: fm-etc
-         secret:
-           secretName: fm-etc
-           defaultMode: 0644
-       - name: fm-bin
-         configMap:
-           name: fm-bin
-           defaultMode: 0755
-       - name: fm-etc-event
-         hostPath:
-           path: /etc/fm/events.yaml
-           type: File
+        - name: fm-etc
+          secret:
+            secretName: fm-etc
+            defaultMode: 0644
+        - name: fm-bin
+          configMap:
+            name: fm-bin
+            defaultMode: 0755
+        - name: fm-etc-event
+          hostPath:
+            path: /etc/fm/events.yaml
+            type: File
+{{- dict "enabled" .Values.manifests.certificates "name" .Values.secrets.tls.faultmanagement.fm_api.public | include "helm-toolkit.snippets.tls_volume" | indent 8 }}
 {{- end }}

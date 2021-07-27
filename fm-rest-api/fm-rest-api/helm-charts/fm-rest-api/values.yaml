@@ -177,6 +177,7 @@ dependencies:
           service: identity
 
 manifests:
+  certificates: false
   configmap_bin: true
   configmap_etc: true
   deployment_fm_rest_api: true

@@ -6,5 +6,8 @@
 
 {{- if .Values.manifests.job_ks_service }}
 {{- $ksServiceJob := dict "envAll" . "serviceName" "fm" "serviceTypes" ( tuple "faultmanagement" ) -}}
+{{- if .Values.manifests.certificates -}}
+{{- $_ := set $ksServiceJob "tlsSecret" .Values.secrets.tls.faultmanagement.fm_api.public -}}
+{{- end -}}
 {{ $ksServiceJob | include "helm-toolkit.manifests.job_ks_service" }}
 {{- end }}
