@@ -1,0 +1,36 @@
+#
+# Copyright (c) 2021 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+image: docker.io/curlimages/curl
+imageTag: 7.77.0
+namespace: default
+
+clusterRoleBinding:
+  create: true
+
+clusterRole:
+  create: true
+
+serviceAccount:
+  create: true
+
+cronSchedule: "0 1 * * *"
+
+nodeSelector:
+  node-role.kubernetes.io/master: ""
+
+jobs:
+  startingDeadlineSeconds: 200
+  successfulHistoryLimit: 3
+  failedHistoryLimit: 1
+
+observedSecrets:
+# the name of the secret to observe
+#  - secretName: "overrideMe"
+# the name of the file within the secret to observe
+#    filename: "overrideMe"
+# the deployment to restart if a change in the secret is detected
+#    deploymentToRestart: "overrideMe"

@@ -1,0 +1,27 @@
+{{/*
+#
+# Copyright (c) 2021 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: secret-observer-bin
+  namespace: {{ .Values.namespace }}
+data:
+  update-secret-sha.sh: |
+    #!/bin/sh
+    set -ex
+
+    KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    SECRET_SHA=$(sha256sum /home/$1 | awk '{print $1}')
+
+    curl -sS -H "Authorization: Bearer $KUBE_TOKEN" \
+        --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+        --request PATCH -H "Accept: application/json" \
+        -H "Content-Type: application/strategic-merge-patch+json" \
+        https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1/namespaces/{{ .Values.namespace }}/deployments/$2 \
+        --data '{"spec":{"template":{"metadata":{"annotations":{"'$3'": "'$SECRET_SHA'"}}}}}';

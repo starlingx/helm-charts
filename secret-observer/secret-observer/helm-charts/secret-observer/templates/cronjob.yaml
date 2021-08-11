@@ -1,0 +1,66 @@
+{{/*
+#
+# Copyright (c) 2021 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+*/}}
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: secret-observer-cron-job
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "{{ .Values.cronSchedule }}"
+  successfulJobsHistoryLimit: {{ .Values.jobs.successfulHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.jobs.failedHistoryLimit }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: {{ .Values.jobs.startingDeadlineSeconds }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: secret-observer
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+          - name: secret-observer-cron-container
+            image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              {{- range .Values.observedSecrets }}
+              /tmp/update-secret-sha.sh "{{ .secretName }}-{{ .deploymentToRestart }}/{{ .filename }}" {{ .deploymentToRestart }} "{{ .secretName }}sha"
+              {{- end }}
+            stdin: true
+            tty: true
+            volumeMounts:
+              {{- range .Values.observedSecrets }}
+              - mountPath: "/home/{{ .secretName }}-{{ .deploymentToRestart }}"
+                name: mounted-{{ .secretName | replace "." "-" }}-{{ .deploymentToRestart | replace "." "-" }}-{{ .filename | replace "." "-" }}
+              {{- end }}
+              - name: pod-tmp
+                mountPath: /tmp
+              - name: secret-observer-bin
+                mountPath: /tmp/update-secret-sha.sh
+                subPath: update-secret-sha.sh
+                readOnly: true
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: default-registry-key
+          volumes:
+            {{- range .Values.observedSecrets }}
+            - name: mounted-{{ .secretName | replace "." "-" }}-{{ .deploymentToRestart | replace "." "-" }}-{{ .filename | replace "." "-" }}
+              secret:
+                secretName: {{ .secretName }}
+            {{- end }}
+            - name: pod-tmp
+              emptyDir: {}
+            - name: secret-observer-bin
+              configMap:
+                name: secret-observer-bin
+                defaultMode: 0555
