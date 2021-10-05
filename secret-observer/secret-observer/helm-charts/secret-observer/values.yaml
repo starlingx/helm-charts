@@ -27,6 +27,8 @@ jobs:
   successfulHistoryLimit: 3
   failedHistoryLimit: 1
 
+tolerations: []
+
 observedSecrets:
 # the name of the secret to observe
 #  - secretName: "overrideMe"

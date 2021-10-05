@@ -52,6 +52,10 @@ spec:
           restartPolicy: OnFailure
           imagePullSecrets:
           - name: default-registry-key
+          {{- if .Values.tolerations }}
+          tolerations:
+            {{- toYaml .Values.tolerations | nindent 10 }}
+          {{- end }}
           volumes:
             {{- range .Values.observedSecrets }}
             - name: mounted-{{ .secretName | replace "." "-" }}-{{ .deploymentToRestart | replace "." "-" }}-{{ .filename | replace "." "-" }}
