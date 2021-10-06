@@ -75,11 +75,12 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
       nodeSelector:
         {{ .Values.labels.fm_api.node_selector_key }}: {{ .Values.labels.fm_api.node_selector_value }}
+{{ if $envAll.Values.pod.tolerations.fm.enabled }}
+{{ tuple $envAll "fm" | include "helm-toolkit.snippets.kubernetes_tolerations" | indent 6 }}
+{{ end }}
       affinity:
         {{ tuple $envAll "fm" "fmapi" | include "helm-toolkit.snippets.kubernetes_pod_anti_affinity" | indent 8 }}
     {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
         - name: fm-etc

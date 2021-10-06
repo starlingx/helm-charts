@@ -6,6 +6,9 @@
 
 {{- if .Values.manifests.job_ks_user }}
 {{- $ksUserJob := dict "envAll" . "serviceName" "fm" -}}
+{{- if .Values.pod.tolerations.fm.enabled -}}
+{{- $_ := set $ksUserJob "tolerationsEnabled" true -}}
+{{- end -}}
 {{- if .Values.manifests.certificates -}}
 {{- $_ := set $ksUserJob "tlsSecret" .Values.secrets.tls.faultmanagement.fm_api.internal -}}
 {{- end -}}
