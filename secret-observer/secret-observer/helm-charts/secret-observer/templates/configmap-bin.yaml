@@ -18,10 +18,14 @@ data:
 
     KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
     SECRET_SHA=$(sha256sum /home/$1 | awk '{print $1}')
+    KUBERNETES_SERVICE_HOST_WITH_BRACKETS=$KUBERNETES_SERVICE_HOST
+    if echo $KUBERNETES_SERVICE_HOST | grep ":"; then
+        KUBERNETES_SERVICE_HOST_WITH_BRACKETS="[$KUBERNETES_SERVICE_HOST]"
+    fi
 
-    curl -sS -H "Authorization: Bearer $KUBE_TOKEN" \
+    curl -sSg -H "Authorization: Bearer $KUBE_TOKEN" \
         --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
         --request PATCH -H "Accept: application/json" \
         -H "Content-Type: application/strategic-merge-patch+json" \
-        https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1/namespaces/{{ .Values.namespace }}/deployments/$2 \
+        https://$KUBERNETES_SERVICE_HOST_WITH_BRACKETS:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1/namespaces/{{ .Values.namespace }}/deployments/$2 \
         --data '{"spec":{"template":{"metadata":{"annotations":{"'$3'": "'$SECRET_SHA'"}}}}}';
