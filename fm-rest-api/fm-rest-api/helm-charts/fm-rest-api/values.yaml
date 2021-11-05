@@ -200,6 +200,9 @@ endpoints:
       admin:
         username: root
         password: password
+        secret:
+          tls:
+            internal: mariadb-tls-direct
       fm:
         username: fm
         password: password
@@ -348,6 +351,7 @@ secrets:
     faultmanagement:
       fm_api:
         public: fm-rest-api-tls-public
+        internal: fm-rest-api-tls-internal
 
 
 resources: {}
