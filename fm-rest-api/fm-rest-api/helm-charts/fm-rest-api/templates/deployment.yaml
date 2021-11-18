@@ -35,6 +35,9 @@ spec:
 {{ tuple $envAll "fmapi" $mounts_fm_rest_api_init | include "helm-toolkit.snippets.kubernetes_entrypoint_init_container" | indent 8 }}
       containers:
         - name: fm-rest-api
+          env:
+            - name: RUNNING_IN_CONTAINER
+              value: "True"
           volumeMounts:
             - name: fm-bin
               mountPath: /tmp/fm-rest-api.sh
