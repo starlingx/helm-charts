@@ -274,6 +274,15 @@ endpoints:
         default: 18003
         public: 80
 pod:
+  probes:
+    fm_rest_api:
+      default:
+        liveness:
+          enabled: True
+          params:
+            initialDelaySeconds: 120
+            periodSeconds: 90
+            timeoutSeconds: 70
   user:
     fm_rest_api:
       uid: 42424

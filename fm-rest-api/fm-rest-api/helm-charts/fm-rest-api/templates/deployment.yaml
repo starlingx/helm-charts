@@ -4,6 +4,11 @@
 #
 */}}
 
+{{- define "fmRestApiLivenessProbeTemplate" }}
+tcpSocket:
+  port: {{ tuple "faultmanagement" "internal" "api" . | include "helm-toolkit.endpoints.endpoint_port_lookup" }}
+{{- end }}
+
 {{- if .Values.manifests.deployment_fm_rest_api }}
 {{- $envAll := . }}
 
@@ -63,6 +68,7 @@ spec:
 {{- dict "enabled" $envAll.Values.manifests.certificates "name" $envAll.Values.endpoints.oslo_db.auth.admin.secret.tls.internal "path" "/etc/mysql/certs" | include "helm-toolkit.snippets.tls_volume_mount" | indent 12 }}
 {{- end }}
 {{- dict "enabled" .Values.manifests.certificates "name" .Values.secrets.tls.faultmanagement.fm_api.internal | include "helm-toolkit.snippets.tls_volume_mount" | indent 12 }}
+{{ dict "envAll" . "component" "fm_rest_api" "container" "default" "type" "liveness" "probeTemplate" (include "fmRestApiLivenessProbeTemplate" . | fromYaml) | include "helm-toolkit.snippets.kubernetes_probe" | indent 10 }}
           command:
             - /tmp/fm-rest-api.sh
           image: "{{ .Values.images.tags.fm_rest_api }}"
