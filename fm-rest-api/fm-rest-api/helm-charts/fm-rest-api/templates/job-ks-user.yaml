@@ -10,7 +10,7 @@
 {{- $_ := set $ksUserJob "tolerationsEnabled" true -}}
 {{- end -}}
 {{- if .Values.manifests.certificates -}}
-{{- $_ := set $ksUserJob "tlsSecret" .Values.secrets.tls.faultmanagement.fm_api.internal -}}
+{{- $_ := set $ksUserJob "tlsSecret" .Values.secrets.tls.faultmanagement.fm_api.public -}}
 {{- end -}}
 {{ $ksUserJob | include "helm-toolkit.manifests.job_ks_user" }}
 {{- end }}
