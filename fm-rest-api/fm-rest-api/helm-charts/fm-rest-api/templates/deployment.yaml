@@ -40,6 +40,7 @@ spec:
 {{ tuple $envAll "fmapi" $mounts_fm_rest_api_init | include "helm-toolkit.snippets.kubernetes_entrypoint_init_container" | indent 8 }}
       containers:
         - name: fm-rest-api
+{{ tuple $envAll $envAll.Values.pod.resources.fm | include "helm-toolkit.snippets.kubernetes_resources" | indent 10 }}
           env:
             - name: RUNNING_IN_CONTAINER
               value: "True"
@@ -74,8 +75,6 @@ spec:
             - name: http
               containerPort: 18003
               protocol: TCP
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
       nodeSelector:
         {{ .Values.labels.fm_api.node_selector_key }}: {{ .Values.labels.fm_api.node_selector_value }}
 {{ if $envAll.Values.pod.tolerations.fm.enabled }}

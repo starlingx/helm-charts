@@ -326,6 +326,14 @@ pod:
         fm:
         timeout: 30
   resources:
+    enabled: false
+    fm:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "1024Mi"
+        cpu: "2000m"
     jobs:
       ks_endpoints:
         requests:
