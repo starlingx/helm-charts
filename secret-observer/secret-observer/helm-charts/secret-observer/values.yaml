@@ -20,7 +20,7 @@ serviceAccount:
 cronSchedule: "0 1 * * *"
 
 nodeSelector:
-  node-role.kubernetes.io/master: ""
+  node-role.kubernetes.io/control-plane: ""
 
 jobs:
   startingDeadlineSeconds: 200
