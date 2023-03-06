@@ -25,6 +25,17 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Allow the release namespace to be overridden for multi-namespace deployments in combined charts
+*/}}
+{{- define "node-feature-discovery.namespace" -}}
+  {{- if .Values.namespaceOverride -}}
+    {{- .Values.namespaceOverride -}}
+  {{- else -}}
+    {{- .Release.Namespace -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "node-feature-discovery.chart" -}}
@@ -52,12 +63,45 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account which the nfd master will use
 */}}
-{{- define "node-feature-discovery.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "node-feature-discovery.fullname" .) .Values.serviceAccount.name }}
+{{- define "node-feature-discovery.master.serviceAccountName" -}}
+{{- if .Values.master.serviceAccount.create -}}
+    {{ default (include "node-feature-discovery.fullname" .) .Values.master.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+    {{ default "default" .Values.master.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account which the nfd worker will use
+*/}}
+{{- define "node-feature-discovery.worker.serviceAccountName" -}}
+{{- if .Values.worker.serviceAccount.create -}}
+    {{ default (printf "%s-worker" (include "node-feature-discovery.fullname" .)) .Values.worker.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.worker.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account which topologyUpdater will use
+*/}}
+{{- define "node-feature-discovery.topologyUpdater.serviceAccountName" -}}
+{{- if .Values.topologyUpdater.serviceAccount.create -}}
+    {{ default (printf "%s-topology-updater" (include "node-feature-discovery.fullname" .)) .Values.topologyUpdater.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.topologyUpdater.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account which topologyGC will use
+*/}}
+{{- define "node-feature-discovery.topologyGC.serviceAccountName" -}}
+{{- if .Values.topologyGC.serviceAccount.create -}}
+    {{ default (printf "%s-topology-gc" (include "node-feature-discovery.fullname" .)) .Values.topologyGC.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.topologyGC.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
