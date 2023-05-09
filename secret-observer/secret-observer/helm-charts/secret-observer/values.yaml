@@ -5,7 +5,7 @@
 #
 
 image: docker.io/curlimages/curl
-imageTag: 7.77.0
+imageTag: 8.00.1
 namespace: default
 
 clusterRoleBinding:
