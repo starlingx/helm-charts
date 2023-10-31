@@ -1,11 +1,11 @@
 #
-# Copyright (c) 2021 Wind River Systems, Inc.
+# Copyright (c) 2021-2023 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
 image: docker.io/curlimages/curl
-imageTag: 8.00.1
+imageTag: 8.4.0
 namespace: default
 
 clusterRoleBinding:
