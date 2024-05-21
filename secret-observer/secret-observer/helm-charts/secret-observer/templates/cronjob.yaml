@@ -34,13 +34,13 @@ spec:
             - -c
             - |
               {{- range .Values.observedSecrets }}
-              /tmp/update-secret-sha.sh "{{ .secretName }}-{{ .deploymentToRestart }}/{{ .filename }}" {{ .deploymentToRestart }} "{{ .secretName }}sha"
+              /tmp/update-secret-sha.sh "{{ .secretName }}-{{ .deploymentToRestart }}-{{ .filename | replace "." "-"}}/{{ .filename }}" {{ .deploymentToRestart }} "{{ .secretName }}sha"
               {{- end }}
             stdin: true
             tty: true
             volumeMounts:
               {{- range .Values.observedSecrets }}
-              - mountPath: "/home/{{ .secretName }}-{{ .deploymentToRestart }}"
+              - mountPath: "/home/{{ .secretName }}-{{ .deploymentToRestart }}-{{ .filename | replace "." "-"}}"
                 name: mounted-{{ .secretName | replace "." "-" }}-{{ .deploymentToRestart | replace "." "-" }}-{{ .filename | replace "." "-" }}
               {{- end }}
               - name: pod-tmp
