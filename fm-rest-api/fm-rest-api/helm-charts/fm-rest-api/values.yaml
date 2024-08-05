@@ -274,6 +274,8 @@ endpoints:
       api:
         default: 18003
         public: 80
+jobs:
+  ttlSecondsAfterFinished: 5400
 pod:
   probes:
     fm_rest_api:
