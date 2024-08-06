@@ -1,16 +1,17 @@
 {{/*
 #
-# Copyright (c) 2021-2022 Wind River Systems, Inc.
+# Copyright (c) 2021-2024 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 */}}
 
-{{- if .Values.clusterRole.create }}
+{{- if .Values.Role.create }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: secret-observer-cr
+  namespace: "{{ .Values.namespace }}"
+  name: secret-observer-r
   labels:
     app: secret-observer
     release: "{{ .Release.Name }}"

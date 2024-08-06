@@ -8,10 +8,10 @@ image: docker.io/curlimages/curl
 imageTag: 8.8.0
 namespace: default
 
-clusterRoleBinding:
+RoleBinding:
   create: true
 
-clusterRole:
+Role:
   create: true
 
 serviceAccount:
