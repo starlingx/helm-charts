@@ -1,0 +1,10 @@
+{{/*
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+*/}}
+
+{{- if .Values.manifests.job_pre_apply_cleanup }}
+{{- $preApplyCleanupJob := dict "envAll" . "serviceName" "fm-rest-api" -}}
+{{ $preApplyCleanupJob | include "helm-toolkit.manifests.job_pre_apply_cleanup" }}
+{{- end }}
