@@ -2,20 +2,13 @@
 - project:
     check:
       jobs:
-        - local-tox-linters
+        - stx-tox-linters
     gate:
       jobs:
-        - local-tox-linters
+        - stx-tox-linters
     post:
       jobs:
         - stx-helm-charts-upload-git-mirror
-
-- job:
-    name: local-tox-linters
-    parent: openstack-tox-linters
-    description: |
-      Run Tox linters on debian-bullseye
-    nodeset: debian-bullseye
 
 - job:
     name: stx-helm-charts-upload-git-mirror
