@@ -2,10 +2,10 @@
 - project:
     check:
       jobs:
-        - stx-tox-linters
+        - starlingx-common-tox-linters
     gate:
       jobs:
-        - stx-tox-linters
+        - starlingx-common-tox-linters
     post:
       jobs:
         - stx-helm-charts-upload-git-mirror
