@@ -5,7 +5,7 @@
 #
 
 image: docker.io/curlimages/curl
-imageTag: 8.13.0
+imageTag: 8.17.0
 namespace: default
 
 RoleBinding:
