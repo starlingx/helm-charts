@@ -34,7 +34,7 @@ spec:
             - -c
             - |
               {{- range .Values.observedSecrets }}
-              /tmp/update-secret-sha.sh "{{ .secretName }}-{{ .deploymentToRestart }}-{{ .filename | replace "." "-"}}/{{ .filename }}" {{ .deploymentToRestart }} "{{ .secretName }}sha"
+              /tmp/update-secret-sha.sh "{{ .secretName }}-{{ .deploymentToRestart }}-{{ .filename | replace "." "-"}}/{{ .filename }}" {{ .deploymentToRestart }} "{{ .secretName }}-{{ .filename | replace "." "-" }}sha"
               {{- end }}
             stdin: true
             tty: true
